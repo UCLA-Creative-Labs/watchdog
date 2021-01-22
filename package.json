@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "lint": "npx eslint \"**/*.js\"",
+    "no-lock": "scripts/noPackageLock.sh"
+  },
+  "dependencies": {
+    "eslint": "^7.18.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-no-floating-promise": "^1.0.2",
+    "eslint-plugin-sort-class-members": "^1.9.0"
+  }
+}
