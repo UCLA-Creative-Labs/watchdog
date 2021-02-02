@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "start": "scripts/run_all.sh",
     "lint": "npx eslint \"**/*.js\"",
     "no-lock": "scripts/noPackageLock.sh"
   },

@@ -1,0 +1,85 @@
+const fs = require('fs');
+const path = require('path');
+const {google} = require('googleapis');
+
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+// const ALL_QUARTERS_ID = '16vmuNiN-8mij8EoEIwvQ_wde9DgF_0IWXfT_95SHfcc';
+const ALL_PLEAD_ID = '18nv5m59ppoZLcjKXYziI-PLNx-dkr8i5Avn1ZnjaGiY';
+
+// Load client secrets from a service account
+fs.readFile(path.resolve(__dirname, '../credentials.json'), (err, content) => {
+  authorize(JSON.parse(content), main);
+});
+
+function authorize(credentials, callback) {
+  const jwt = new google.auth.JWT(credentials.client_email, null, credentials.private_key, SCOPES);
+  callback(jwt);
+}
+
+function main(auth) {
+  process.stdout.write('Parsing project sheet .. ');
+  readProjectSheet(auth);
+  process.stdout.write('Parsing project applications sheet .. ');
+  readProjectApplicationsSheet(auth);
+}
+
+function readProjectSheet(auth) {
+  const sheets = google.sheets({version: 'v4', auth});
+  const endQuarter = ['Winter', '2021'];
+  const startQuarter = ['Spring', '2017'];
+  const quarters = ['Winter', 'Spring', 'Fall'];
+  let current = startQuarter;
+  let masterDict = {};
+  while (current[1] < endQuarter[1] ||
+    (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))) {
+
+    const currentQuarter = current[0];
+    const currentYear = current[1];
+    if (!masterDict[currentYear])
+      masterDict[currentYear] = {};
+
+    // Run on current quarter
+    sheets.spreadsheets.values.get({
+      spreadsheetId: ALL_PLEAD_ID,
+      range: `${current[0]} ${current[1]}!A:Z`,
+    }).then((response) => {
+      const override = currentYear < '2018' || (currentYear == '2018' && quarters.indexOf(currentQuarter) <= quarters.indexOf('Spring'));
+      const quarterInfo = formatProjectResponse(response, override);
+      masterDict[currentYear][currentQuarter] = quarterInfo;
+      if (currentQuarter == endQuarter[0] && currentYear == endQuarter[1])
+        fs.writeFileSync(path.resolve(__dirname, '../data/projects.json'), JSON.stringify(masterDict, null, 2));
+    });
+
+    // Increment current
+    const nextQuarter = current[0] === quarters.slice(-1)[0]
+      ? 0
+      : quarters.indexOf(current[0]) + 1;
+    if (nextQuarter === 0)
+      current[1]++;
+    current[0] = quarters[nextQuarter];
+  }
+}
+
+function formatProjectResponse(response, override=false) {
+  const values = response.data.values;
+  const validKeys = ['Description', 'Project', 'Accepted'];
+  let label2Index = {};
+  values[0].map((label, index) => {
+    if (validKeys.includes(label)) {
+      label2Index[label] = index;
+    }
+  });
+  let projInfo = {};
+  values.slice(1).map((accepted) => {
+    if (override || accepted[label2Index.Accepted]) {
+      projInfo[accepted[label2Index.Project]] = {
+        Description: accepted[label2Index.Description],
+      };
+    }
+  });
+  return projInfo;
+}
+
+function readProjectApplicationsSheet(auth) {
+  auth;
+}
