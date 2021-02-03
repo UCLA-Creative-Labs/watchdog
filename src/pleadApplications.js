@@ -3,7 +3,6 @@ const path = require('path');
 const {google} = require('googleapis');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-// const ALL_QUARTERS_ID = '16vmuNiN-8mij8EoEIwvQ_wde9DgF_0IWXfT_95SHfcc';
 const ALL_PLEAD_ID = '18nv5m59ppoZLcjKXYziI-PLNx-dkr8i5Avn1ZnjaGiY';
 
 // Load client secrets from a service account
@@ -19,8 +18,20 @@ function authorize(credentials, callback) {
 function main(auth) {
   process.stdout.write('Parsing project sheet .. ');
   readProjectSheet(auth);
-  process.stdout.write('Parsing project applications sheet .. ');
-  readProjectApplicationsSheet(auth);
+}
+
+function batchedJsonCallback(masterDict, savePath, numOfQuarters) {
+  if (masterDict.length !== numOfQuarters) return;
+
+  let ret = {};
+  masterDict.sort(([a_q, a_y, _a], [b_q, b_y, _b]) => {
+    return a_y < b_y || (a_y == b_y && a_q < b_q) ? -1 : 1;
+  });
+  masterDict.map(([quarter, year, info]) => {
+    if (!ret[year]) ret[year] = {};
+    ret[year][quarter] = info;
+  });
+  fs.writeFileSync(path.resolve(__dirname, savePath), JSON.stringify(ret, null, 2));
 }
 
 function readProjectSheet(auth) {
@@ -28,15 +39,15 @@ function readProjectSheet(auth) {
   const endQuarter = ['Winter', '2021'];
   const startQuarter = ['Spring', '2017'];
   const quarters = ['Winter', 'Spring', 'Fall'];
+
   let current = startQuarter;
   let masterDict = {};
+
   while (current[1] < endQuarter[1] ||
     (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))) {
 
     const currentQuarter = current[0];
     const currentYear = current[1];
-    if (!masterDict[currentYear])
-      masterDict[currentYear] = {};
 
     // Run on current quarter
     sheets.spreadsheets.values.get({
@@ -45,9 +56,8 @@ function readProjectSheet(auth) {
     }).then((response) => {
       const override = currentYear < '2018' || (currentYear == '2018' && quarters.indexOf(currentQuarter) <= quarters.indexOf('Spring'));
       const quarterInfo = formatProjectResponse(response, override);
-      masterDict[currentYear][currentQuarter] = quarterInfo;
-      if (currentQuarter == endQuarter[0] && currentYear == endQuarter[1])
-        fs.writeFileSync(path.resolve(__dirname, '../data/projects.json'), JSON.stringify(masterDict, null, 2));
+      masterDict.push([currentQuarter, currentYear, quarterInfo]);
+      batchedJsonCallback(masterDict, '../data/project.json', 12);
     });
 
     // Increment current
@@ -78,8 +88,4 @@ function formatProjectResponse(response, override=false) {
     }
   });
   return projInfo;
-}
-
-function readProjectApplicationsSheet(auth) {
-  auth;
 }
