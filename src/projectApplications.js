@@ -31,12 +31,11 @@ function readProjectMemberSheet(auth) {
   let masterDict = {};
   let count = 0;
 
-  
   while(current[1] < endQuarter[1] ||
     (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))){
-    
-    const currentQuarter = current[0];
-    const currentYear = current[1];
+
+    // const currentQuarter = current[0];
+    // const currentYear = current[1];
     // Run on current quarter
     sheets.spreadsheets.values.get({
       spreadsheetId: ALL_QUARTERS_ID,
@@ -64,7 +63,7 @@ function readProjectMemberSheet(auth) {
       count++;
       fs.writeFileSync(path.resolve(__dirname, '../data/projectmember.json'), JSON.stringify(masterDict, null, 2));
     });
-    
+
     // Increment current
     const nextQuarter = current[0] === quarters.slice(-1)[0]
       ? 0
@@ -77,7 +76,7 @@ function readProjectMemberSheet(auth) {
 
 /*
  * Take the applications for a given quarter
- * and format them to a uniform object 
+ * and format them to a uniform object
  */
 function formatProjectMemberResponse(response) {
   const values = response.data.values;
