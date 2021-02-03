@@ -106,32 +106,3 @@ function formatProjectMemberResponse(response) {
     ];
   });
 }
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-
-/*Accepted	Name	Project Major Year Quarter
-  format the responses for people: email, quarter, first pick, accepted status (project, major, year if applicable)
-        later: proj deadline + timestamp, email used (ucla vs gmail - use same email for different apps?)
-  go through each quarter, store into data dir (json file)
-
-  Email: { Major              Quarter1 Quarter2 ... }
-           Computer Science    2 -> accepted 1 -> applied 0 -> not applied
-*/
