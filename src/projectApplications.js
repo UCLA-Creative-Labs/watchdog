@@ -28,7 +28,7 @@ function readProjectMemberSheet(auth) {
   const startQuarter = ['Fall', '2016'];
   const quarters = ['Winter', 'Spring', 'Fall'];
   let current = startQuarter;
-  let masterDict = [];
+  let masterDict = {};
   let count = 0;
 
   
@@ -43,26 +43,17 @@ function readProjectMemberSheet(auth) {
       range: `${current[0]} ${current[1]}!A:Z`,
     }).then((response) => {
       const info = formatProjectMemberResponse(response);
-      // console.log(info);
       let memberinfo = [];
       let quarter = [];
-      for(var i = 0; i<info.length; i++) {
+      for(let i = 0; i<info.length; i++) {
         if(!(info[i][0] in masterDict)) {
-          //console.log('running if statement');
-          
           quarter = new Array(numOfQuarters).fill(0);
           quarter[count] = 1;
           memberinfo = [info[i][1], info[i][2], quarter];
-          //console.log(memberinfo);
-          masterDict.push({
-            key: info[i][0],
-            value: memberinfo,
-          });
+          masterDict[info[i][0]] = memberinfo;
         }
         else
         {
-          //console.log('run else statement');
-          // masterDict[info[i][0]][2][count] = 1;
           quarter[count] = 1;
         }
         if (info[i][3]==2)
@@ -71,8 +62,7 @@ function readProjectMemberSheet(auth) {
         }
       }
       count++;
-      console.log(count);
-      fs.writeFileSync(path.resolve(__dirname, '../data/projectmember.json'), JSON.stringify(masterDict));
+      fs.writeFileSync(path.resolve(__dirname, '../data/projectmember.json'), JSON.stringify(masterDict, null, 2));
     });
     
     // Increment current
