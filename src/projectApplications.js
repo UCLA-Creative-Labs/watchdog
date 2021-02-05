@@ -62,7 +62,6 @@ function readProjectMemberSheet(auth) {
     const currentQuarter = current[0];
     const currentYear = current[1];
     const index = quarter2Index[currentYear][currentQuarter];
-    console.log(index);
 
     // Run on current quarter
     sheets.spreadsheets.values.get({
@@ -70,7 +69,7 @@ function readProjectMemberSheet(auth) {
       range: `${current[0]} ${current[1]}!A:Z`,
     }).then((response) => {
       const info = formatProjectMemberResponse(response);
-  
+
       for(let i = 0; i<info.length; i++) {
         const [email, major, year, status, timestamp, choices] = info[i];
         if(!(email in masterDict)) {
@@ -141,7 +140,7 @@ function formatProjectMemberResponse(response) {
       third: label2Index[`${third}`] < 0
         ? undefined
         : memberapps[label2Index[`${third}`]],
-    }
+    };
 
     Object.keys(choices).forEach((key) => {
       if (!choices[key]) return;
