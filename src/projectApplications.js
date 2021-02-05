@@ -5,8 +5,37 @@ const {google} = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const ALL_QUARTERS_ID = '16vmuNiN-8mij8EoEIwvQ_wde9DgF_0IWXfT_95SHfcc';
 
-const numOfQuarters = 14;
+const endQuarter = ['Winter', '2021'];
+const startQuarter = ['Fall', '2016'];
+const quarters = ['Winter', 'Spring', 'Fall'];
 
+function isGreater(current, end) {
+  return (current[1] < end[1] ||
+    (current[1] == end[1] && quarters.indexOf(current[0]) <= quarters.indexOf(end[0])));
+}
+
+function init () {
+  let q2I = {};
+  let current = [...startQuarter];
+  let num = 0;
+
+  while(isGreater(current, endQuarter)) {
+    if (!q2I[current[1]]) q2I[current[1]] = {};
+    q2I[current[1]][current[0]] = num;
+    num++;
+
+    // Increment current
+    const nextQuarter = current[0] === quarters.slice(-1)[0]
+      ? 0
+      : quarters.indexOf(current[0]) + 1;
+    if (nextQuarter === 0)
+      current[1]++;
+    current[0] = quarters[nextQuarter];
+  }
+
+  return [q2I, num];
+};
+const [quarter2Index, numOfQuarters] = init();
 // Load client secrets from a service account
 fs.readFile(path.resolve(__dirname, '../credentials.json'), (err, content) => {
   authorize(JSON.parse(content), main);
@@ -24,43 +53,43 @@ function main(auth) {
 
 function readProjectMemberSheet(auth) {
   const sheets = google.sheets({version: 'v4', auth});
-  const endQuarter = ['Winter', '2021'];
-  const startQuarter = ['Fall', '2016'];
-  const quarters = ['Winter', 'Spring', 'Fall'];
-  let current = startQuarter;
+
+  let current = [...startQuarter];
   let masterDict = {};
-  let count = 0;
+  console.log(current);
 
-  while(current[1] < endQuarter[1] ||
-    (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))){
+  while(isGreater(current, endQuarter)){
 
-    // const currentQuarter = current[0];
-    // const currentYear = current[1];
+    const currentQuarter = current[0];
+    const currentYear = current[1];
+    const index = quarter2Index[currentYear][currentQuarter];
+    console.log(index);
     // Run on current quarter
     sheets.spreadsheets.values.get({
       spreadsheetId: ALL_QUARTERS_ID,
       range: `${current[0]} ${current[1]}!A:Z`,
     }).then((response) => {
       const info = formatProjectMemberResponse(response);
-      let memberinfo = [];
-      let quarter = [];
+
       for(let i = 0; i<info.length; i++) {
         if(!(info[i][0] in masterDict)) {
-          quarter = new Array(numOfQuarters).fill(0);
-          quarter[count] = 1;
-          memberinfo = [info[i][1], info[i][2], quarter];
-          masterDict[info[i][0]] = memberinfo;
+          let quarter = new Array(numOfQuarters).fill(0);
+          quarter[index] = info[i][3];
+          masterDict[info[i][0]] = {
+            major: info[i][1],
+            year: info[i][2],
+            quarterBitmap: quarter,
+          };
         }
-        else
-        {
-          quarter[count] = 1;
-        }
-        if (info[i][3]==2)
-        {
-          quarter[count] = 2;
+        else {
+          const qbm = masterDict[info[i][0]].quarterBitmap;
+          const firstQuarter = qbm.findIndex(x => x > 0);
+          if (index < firstQuarter) {
+            masterDict[info[i][0]].year = info[i][2];
+          }
+          masterDict[info[i][0]].quarterBitmap[index] = info[i][3];
         }
       }
-      count++;
       fs.writeFileSync(path.resolve(__dirname, '../data/projectmember.json'), JSON.stringify(masterDict, null, 2));
     });
 
