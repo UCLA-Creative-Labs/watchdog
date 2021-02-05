@@ -41,7 +41,7 @@ function readProjectSheet(auth) {
   const quarters = ['Winter', 'Spring', 'Fall'];
 
   let current = startQuarter;
-  let masterDict = {};
+  let masterDict = [];
 
   while (current[1] < endQuarter[1] ||
     (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))) {
@@ -57,7 +57,7 @@ function readProjectSheet(auth) {
       const override = currentYear < '2018' || (currentYear == '2018' && quarters.indexOf(currentQuarter) <= quarters.indexOf('Spring'));
       const quarterInfo = formatProjectResponse(response, override);
       masterDict.push([currentQuarter, currentYear, quarterInfo]);
-      batchedJsonCallback(masterDict, '../data/project.json', 12);
+      batchedJsonCallback(masterDict, '../data/projects.json', 12);
     });
 
     // Increment current
