@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectmember = require('../projectmember.json');
 const projectmemberold = require('../projectmember-old.json');
+const projectmember = require('../projectmember.json');
 
 const keys = Object.keys(projectmember).sort((a, b) => a > b ? 1 : -1);
 const keysold = Object.keys(projectmemberold).sort((a, b) => a > b ? 1 : -1);

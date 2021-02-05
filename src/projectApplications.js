@@ -34,7 +34,7 @@ function init () {
   }
 
   return [q2I, num];
-};
+}
 const [quarter2Index, numOfQuarters] = init();
 // Load client secrets from a service account
 fs.readFile(path.resolve(__dirname, '../credentials.json'), (err, content) => {
@@ -56,14 +56,13 @@ function readProjectMemberSheet(auth) {
 
   let current = [...startQuarter];
   let masterDict = {};
-  console.log(current);
 
   while(isGreater(current, endQuarter)){
 
     const currentQuarter = current[0];
     const currentYear = current[1];
     const index = quarter2Index[currentYear][currentQuarter];
-    console.log(index);
+
     // Run on current quarter
     sheets.spreadsheets.values.get({
       spreadsheetId: ALL_QUARTERS_ID,
