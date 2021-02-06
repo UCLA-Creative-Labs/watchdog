@@ -47,7 +47,7 @@ function authorize(credentials, callback) {
 }
 
 function main(auth) {
-  process.stdout.write('Parsing project sheet .. ');
+  process.stdout.write('Parsing project member sheet .. \n');
   readProjectMemberSheet(auth);
 }
 
@@ -71,22 +71,33 @@ function readProjectMemberSheet(auth) {
       const info = formatProjectMemberResponse(response);
 
       for(let i = 0; i<info.length; i++) {
-        if(!(info[i][0] in masterDict)) {
+        const [email, major, year, status, timestamp, choices] = info[i];
+        if(!(email in masterDict)) {
           let quarter = new Array(numOfQuarters).fill(0);
-          quarter[index] = info[i][3];
-          masterDict[info[i][0]] = {
-            major: info[i][1],
-            year: info[i][2],
+          let quarterInfo = new Array(numOfQuarters).fill(undefined);
+          quarter[index] = status;
+          quarterInfo[index] = {
+            timestamp: timestamp,
+            choices: choices,
+          };
+          masterDict[email] = {
+            major: major,
+            year: year,
             quarterBitmap: quarter,
+            quarterInfo,
           };
         }
         else {
-          const qbm = masterDict[info[i][0]].quarterBitmap;
+          const qbm = masterDict[email].quarterBitmap;
           const firstQuarter = qbm.findIndex(x => x > 0);
           if (index < firstQuarter) {
-            masterDict[info[i][0]].year = info[i][2];
+            masterDict[email].year = year;
           }
-          masterDict[info[i][0]].quarterBitmap[index] = info[i][3];
+          masterDict[email].quarterBitmap[index] = status;
+          masterDict[email].quarterInfo[index] = {
+            timestamp: timestamp,
+            choices: choices,
+          };
         }
       }
       fs.writeFileSync(path.resolve(__dirname, '../data/projectmember.json'), JSON.stringify(masterDict, null, 2));
@@ -109,17 +120,48 @@ function readProjectMemberSheet(auth) {
 function formatProjectMemberResponse(response) {
   const values = response.data.values;
   const major = 'What\'s your major?';
-  const validKeys = ['Email', major, 'Year', 'Accepted'];
+  const first = 'First Choice:';
+  const second = 'Second Choice:';
+  const third = 'Third Choice:';
+  const validKeys = ['Email', major, 'Year', 'Accepted', first, second, third, 'Timestamp'];
   let label2Index = {};
   values[0].map((label, index) => {
     label2Index[label] = validKeys.includes(label) ? index : -1;
   });
   return values.slice(1).map((memberapps) => {
+    const choices = {
+      first: label2Index[`${first}`] < 0
+        ? undefined
+        : memberapps[label2Index[`${first}`]],
+      second: label2Index[`${second
+      }`] < 0
+        ? undefined
+        : memberapps[label2Index[`${second}`]],
+      third: label2Index[`${third}`] < 0
+        ? undefined
+        : memberapps[label2Index[`${third}`]],
+    };
+
+    Object.keys(choices).forEach((key) => {
+      if (!choices[key]) return;
+
+      if (['None', 'N/A', ''].includes(choices[key]) || !choices[key]) {
+        choices[key] = undefined;
+      }
+      else {
+        const split = choices[key].split(' : ');
+        if (split.length > 1) {
+          choices[key] = split[1];
+        }
+      }
+    });
     return [
       memberapps[label2Index.Email],
       label2Index[`${major}`] < 0 ? undefined : memberapps[label2Index[`${major}`]],
       label2Index.Year < 0 ? undefined : memberapps[label2Index.Year],
       memberapps[label2Index.Accepted] ? 2 : 1,
+      memberapps[label2Index.Timestamp],
+      choices,
     ];
   });
 }

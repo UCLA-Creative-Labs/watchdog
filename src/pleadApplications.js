@@ -5,6 +5,10 @@ const {google} = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const ALL_PLEAD_ID = '18nv5m59ppoZLcjKXYziI-PLNx-dkr8i5Avn1ZnjaGiY';
 
+const endQuarter = ['Winter', '2021'];
+const startQuarter = ['Spring', '2017'];
+const quarters = ['Winter', 'Spring', 'Fall'];
+
 // Load client secrets from a service account
 fs.readFile(path.resolve(__dirname, '../credentials.json'), (err, content) => {
   authorize(JSON.parse(content), main);
@@ -16,7 +20,7 @@ function authorize(credentials, callback) {
 }
 
 function main(auth) {
-  process.stdout.write('Parsing project sheet .. ');
+  process.stdout.write('Parsing project lead sheet .. \n');
   readProjectSheet(auth);
 }
 
@@ -25,7 +29,7 @@ function batchedJsonCallback(masterDict, savePath, numOfQuarters) {
 
   let ret = {};
   masterDict.sort(([a_q, a_y, _a], [b_q, b_y, _b]) => {
-    return a_y < b_y || (a_y == b_y && a_q < b_q) ? -1 : 1;
+    return a_y < b_y || (a_y == b_y && quarters.indexOf(a_q) < quarters.indexOf(b_q)) ? 1 : -1;
   });
   masterDict.map(([quarter, year, info]) => {
     if (!ret[year]) ret[year] = {};
@@ -36,12 +40,9 @@ function batchedJsonCallback(masterDict, savePath, numOfQuarters) {
 
 function readProjectSheet(auth) {
   const sheets = google.sheets({version: 'v4', auth});
-  const endQuarter = ['Winter', '2021'];
-  const startQuarter = ['Spring', '2017'];
-  const quarters = ['Winter', 'Spring', 'Fall'];
 
   let current = startQuarter;
-  let masterDict = {};
+  let masterDict = [];
 
   while (current[1] < endQuarter[1] ||
     (current[1] == endQuarter[1] && quarters.indexOf(current[0]) <= quarters.indexOf(endQuarter[0]))) {
@@ -57,7 +58,7 @@ function readProjectSheet(auth) {
       const override = currentYear < '2018' || (currentYear == '2018' && quarters.indexOf(currentQuarter) <= quarters.indexOf('Spring'));
       const quarterInfo = formatProjectResponse(response, override);
       masterDict.push([currentQuarter, currentYear, quarterInfo]);
-      batchedJsonCallback(masterDict, '../data/project.json', 12);
+      batchedJsonCallback(masterDict, '../data/projects.json', 12);
     });
 
     // Increment current
