@@ -1,7 +1,7 @@
 
 # Insights
 
-Number of total unique applications: 1231
+Number of total unique applications: `1231`
 
 | Quarter | Year | Number of Applications |
 | --- | --- | --- |

@@ -145,7 +145,7 @@ function formatProjectMemberResponse(response) {
     Object.keys(choices).forEach((key) => {
       if (!choices[key]) return;
 
-      if (['None', 'N/A', ''].includes(choices[key]) || !choices[key]) {
+      if (['None', 'N/A'].includes(choices[key]) || !choices[key] || choices[key] === '') {
         choices[key] = undefined;
       }
       else {
