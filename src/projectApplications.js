@@ -47,7 +47,7 @@ function authorize(credentials, callback) {
 }
 
 function main(auth) {
-  process.stdout.write('Parsing project sheet .. ');
+  process.stdout.write('Parsing project member sheet .. \n');
   readProjectMemberSheet(auth);
 }
 
@@ -145,7 +145,7 @@ function formatProjectMemberResponse(response) {
     Object.keys(choices).forEach((key) => {
       if (!choices[key]) return;
 
-      if (choices[key] === 'None') {
+      if (['None', 'N/A', ''].includes(choices[key]) || !choices[key]) {
         choices[key] = undefined;
       }
       else {
