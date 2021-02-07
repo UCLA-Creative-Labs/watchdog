@@ -1,7 +1,6 @@
-const quarters = ['Winter', 'Spring', 'Fall'];
 const msInDay = 1000*60*60*24;
 
-d3.json("projects-extended.json").then((data) => {
+d3.json('projects-extended.json').then((data) => {
   let x_data = [];
   let y_data = [];
   let qualified_quarters = 0;
@@ -14,7 +13,7 @@ d3.json("projects-extended.json").then((data) => {
       const timestamps = data[year][quarter].timestamps;
 
       if (timestamps.every((v) => !v) || year < '2018' || (year == '2018' && quarter == 'Winter')) return;
-      
+
       const dates = timestamps.map((v) => new Date(v));
       const sorted_dates = dates.sort((a, b) => a < b ? -1 : 1);
       sorted_dates.forEach((date) => date.setHours(0,0,0,0));
@@ -24,7 +23,7 @@ d3.json("projects-extended.json").then((data) => {
         const diff = date.getTime() - start_date.getTime();
         return (Math.floor(diff / msInDay) + 1);
       });
-      
+
       const quarter_heat_map = normalized_dates.reduce((acc, v) => {
         acc[v] = acc[v] ? acc[v] + 1 : 1;
         return acc;
@@ -36,7 +35,7 @@ d3.json("projects-extended.json").then((data) => {
         if (!heat_map[key]) heat_map[key] = 0;
         heat_map[key] += quarter_heat_map[key];
       });
-      
+
       qualified_quarters++;
     });
   });
@@ -51,8 +50,7 @@ d3.json("projects-extended.json").then((data) => {
   }], {
     title: 'Percent of applications vs. Days since applications drop',
     xaxis: {title: 'Days'},
-    yaxis: {title: 'Percentage of Applicants'}
+    yaxis: {title: 'Percentage of Applicants'},
   });
 });
 
- 
