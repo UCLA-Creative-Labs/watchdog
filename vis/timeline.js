@@ -48,7 +48,9 @@ d3.json("projects-extended.json").then((data) => {
     x: x_data,
     y: y_data,
     type: 'line',
-  }]);
+  }], {
+    title: 'Percent of applications vs. Days since applications drop'
+  });
 });
 
  
