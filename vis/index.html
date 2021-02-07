@@ -1,21 +1,26 @@
 <head>
-  <title> Test: Data Vis </title>
+  <title> Watchdog </title>
 </head>
 
 <body>
-  <h1>
-      Data Vis 
+  <h1 style="color:#2B3856; font-family:Helvetica;text-align:center;">
+      Data Visualization 
   </h1>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <div id="apps_proj" style="width:800px;height:500px;">
-  <script src="/plotly.js"></script>
-  </div>
-  <div id="timeline" style="width:600px;height:250px;">
-    <script src="/timeline.js"></script>
-  </div>
-</body> 
+  <div id="apps_proj" style="width:800px;height:500px;"></div>
+  <div id="year" style="width:800px;height:500px;"></div>
+  <div id="major" style="width:800px;height:500px;"></div>
 
+  <script src="/plotly.js"></script>
+  <!-- <div id="timeline" style="width:600px;height:250px;"></div>
+  <script src="/timeline.js"></script> -->
+</body> 
+<style>
+  div{
+    margin-bottom:50px;
+  }
+</style>
 <!-- number of each type of project, 
   year of applicants (1, 2, 3, 4),  
   major of applicants
