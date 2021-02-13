@@ -1,11 +1,12 @@
+/* eslint-disable no-undef */
+
 var x_data = [];
 var y_data = [];
 var y2_data = [81, 91, 88, 123, 43, 154, 171, 106, 142, 185, 144, 78, 124, 53];
 var y3_data = [];
-const _D3 = d3;
-const _Plotly = Plotly;
 
-_D3.json('projects-extended.json').then((res) => {
+
+d3.json('projects-extended.json').then((res) => {
     Object.keys(res).forEach(year => {
         const quarters = Object.keys(res[year]).reverse();
         const quartersinfo = Object.values(res[year]).reverse();
@@ -74,7 +75,7 @@ _D3.json('projects-extended.json').then((res) => {
 
     var alldata = [trace1, trace2];
 
-    _Plotly.newPlot('apps_proj', alldata, layout);
+    Plotly.newPlot('apps_proj', alldata, layout);
  });
 
  var year_info = [];
@@ -83,7 +84,7 @@ _D3.json('projects-extended.json').then((res) => {
  var major_clean = [];
  var y_year = [0,0,0,0,0];
  var y_major = [0,0,0,0,0,0,0,0,0,0,0];
-_D3.json('sorted-projectmember.json').then((res) => {
+d3.json('sorted-projectmember.json').then((res) => {
     Object.keys(res).forEach(applicant => {
         const applicantinfo = Object.values(res[applicant]);
         year_info.push((applicantinfo)[1]);
@@ -217,8 +218,8 @@ _D3.json('sorted-projectmember.json').then((res) => {
         },
     };
 
-    _Plotly.newPlot('year', [data_year], layout_year);
-    _Plotly.newPlot('major', [data_major], layout_major);
+    Plotly.newPlot('year', [data_year], layout_year);
+    Plotly.newPlot('major', [data_major], layout_major);
  });
 
 
