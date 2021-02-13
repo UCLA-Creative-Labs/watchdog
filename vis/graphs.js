@@ -83,7 +83,7 @@ d3.json('projects-extended.json').then((res) => {
         });
         quarter_count++;
     });
-  
+
     var proj_type = {
         x: ['Tech', 'Non-tech', 'Web', 'Art', 'App', 'Game', 'IoT', 'Writing', 'AR', 'VR'],
         y: proj_type_num,
@@ -103,7 +103,7 @@ d3.json('projects-extended.json').then((res) => {
     let data = [];
     let sub = 0;
     let project_names = ['Tech', 'Non-tech', 'Web', 'Art', 'App', 'Game', 'IoT', 'Writing', 'AR', 'VR'];
-    
+
     project_names.map(category => {
         var stacked = {
             x: type_quarter,
@@ -115,7 +115,6 @@ d3.json('projects-extended.json').then((res) => {
             name: category,
         };
         data.push(stacked);
-        console.log(stacked);
         sub++;
     });
 
@@ -129,7 +128,7 @@ d3.json('projects-extended.json').then((res) => {
         },
         barmode: 'stack',
     };
-    
+
     Plotly.newPlot('type', data, layout_proj_quarters);
 });
 
