@@ -48,8 +48,8 @@ d3.json('projects-extended.json').then((res) => {
                     proj_type_quarter[quarter_count][1]++;
                 }
                 if(desc[i].includes('web')) {
-                    proj_type_num[2]++;
-                    proj_type_quarter[quarter_count][2]++;
+                    proj_type_num[7]++;
+                    proj_type_quarter[quarter_count][7]++;
                 }
                 if(desc[i].includes('app')) {
                     proj_type_num[4]++;
@@ -68,8 +68,8 @@ d3.json('projects-extended.json').then((res) => {
                     proj_type_quarter[quarter_count][5]++;
                 }
                 if(desc[i].includes('writing')) {
-                    proj_type_num[7]++;
-                    proj_type_quarter[quarter_count][7]++;
+                    proj_type_num[2]++;
+                    proj_type_quarter[quarter_count][2]++;
                 }
                 if(desc[i].includes('iot')) {
                     proj_type_num[6]++;
@@ -84,11 +84,31 @@ d3.json('projects-extended.json').then((res) => {
         quarter_count++;
     });
 
-    var proj_type = {
-        x: ['Tech', 'Non-tech', 'Web', 'Art', 'App', 'Game', 'IoT', 'Writing', 'AR', 'VR'],
-        y: proj_type_num,
-        type: 'bar',
-    };
+    let data_projects = [];
+    let index = 2;
+    let proj = [];
+    let project_names_only = ['Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
+    project_names_only.map(proj_type => {
+        if (proj_type == 'Writing' || proj_type == 'Art') {
+            proj = {
+                x: ['Tech', 'Non-tech'],
+                y: [0, proj_type_num[index]],
+                type: 'bar',
+                name: project_names_only[index-2],
+            };
+        }
+        else {
+            proj = {
+                x: ['Tech', 'Non-tech'],
+                y: [proj_type_num[index], 0],
+                type: 'bar',
+                name: project_names_only[index-2],
+            };
+        }
+        data_projects.push(proj);
+        index++;
+    });
+
     var layout_proj_type = {
         title: 'Number of Projects by Type',
         xaxis: {
@@ -97,12 +117,13 @@ d3.json('projects-extended.json').then((res) => {
         yaxis: {
             title: 'Number of Projects',
         },
+        barmode: 'stack',
     };
+    Plotly.newPlot('graphs', data_projects, layout_proj_type);
 
-    Plotly.newPlot('graphs', [proj_type], layout_proj_type);
     let data = [];
     let sub = 0;
-    let project_names = ['Tech', 'Non-tech', 'Web', 'Art', 'App', 'Game', 'IoT', 'Writing', 'AR', 'VR'];
+    let project_names = ['Tech', 'Non-tech', 'Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
 
     project_names.map(category => {
         var stacked = {

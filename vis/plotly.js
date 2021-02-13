@@ -187,7 +187,7 @@ d3.json('sorted-projectmember.json').then((res) => {
     });
 
     var data_major = {
-        x: ['Computer Science/CS', 'Cognitive Science', 'Life Sciences',
+        x: ['Computer Science', 'Cognitive Science', 'Life Sciences',
             'Engineering', 'Math', 'Econ', 'DESMA', 'Communications',
             'Physics', 'Chemistry', 'Other'],
         y: y_major,
