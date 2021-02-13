@@ -1,6 +1,6 @@
 const msInDay = 1000*60*60*24;
 
-d3.json('projects-extended.json').then((data) => {
+_D3.json('projects-extended.json').then((data) => {
   let x_data = [];
   let y_data = [];
   let qualified_quarters = 0;
@@ -43,7 +43,7 @@ d3.json('projects-extended.json').then((data) => {
   x_data = Object.keys(heat_map).map((v) => +v);
   y_data = Object.values(heat_map).map((v) => v / qualified_quarters);
 
-  Plotly.newPlot('timeline', [{
+  _Plotly.newPlot('timeline', [{
     x: x_data,
     y: y_data,
     type: 'line',
