@@ -4,6 +4,9 @@ var num_projects = [];
 var y_descriptions = [];
 var type_quarter = [];
 
+const number_project_types = 10;
+const number_quarters = 12;
+
 d3.json('projects-extended.json').then((res) => {
     Object.keys(res).forEach(year => {
         const quarters = Object.keys(res[year]).reverse();
@@ -19,21 +22,11 @@ d3.json('projects-extended.json').then((res) => {
         }
     });
 
-    let proj_type_num = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // number of projects for each category
-    let proj_type_quarter = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+    let proj_type_num = Array(number_project_types).fill(0);
+
+    let proj_type_quarter = Array(number_quarters).fill().map(() =>
+        Array(number_project_types).fill(0),
+    );
 
     let quarter_count = 0;
     y_descriptions.map(quarter => {
