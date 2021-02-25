@@ -28,8 +28,7 @@ d3.json('projects-extended.json').then((res) => {
         Array(number_project_types).fill(0),
     );
 
-    let quarter_count = 0;
-    y_descriptions.map(quarter => {
+    y_descriptions.map((quarter, quarter_count) => {
         quarter.map(desc => {
             for (i in desc) {
                 if(desc[i].includes('tech')) {
@@ -74,32 +73,26 @@ d3.json('projects-extended.json').then((res) => {
                 }
             }
         });
-        quarter_count++;
     });
 
     let data_projects = [];
-    let index = 2;
     let proj = [];
     let project_names_only = ['Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
-    project_names_only.map(proj_type => {
-        if (proj_type == 'Writing' || proj_type == 'Art') {
-            proj = {
-                x: ['Tech', 'Non-tech'],
-                y: [0, proj_type_num[index]],
-                type: 'bar',
-                name: project_names_only[index-2],
-            };
-        }
-        else {
-            proj = {
-                x: ['Tech', 'Non-tech'],
-                y: [proj_type_num[index], 0],
-                type: 'bar',
-                name: project_names_only[index-2],
-            };
-        }
-        data_projects.push(proj);
-        index++;
+    data_projects = project_names_only.map((proj_type, index) => {
+        proj_type == 'Writing' || proj_type == 'Art' ?
+        proj = {
+            x: ['Tech', 'Non-tech'],
+            y: [0, proj_type_num[index+2]],
+            type: 'bar',
+            name: project_names_only[index],
+        } : 
+        proj = {
+            x: ['Tech', 'Non-tech'],
+            y: [proj_type_num[index+2], 0],
+            type: 'bar',
+            name: project_names_only[index],
+        };
+        return proj;
     });
 
     var layout_proj_type = {
@@ -112,24 +105,21 @@ d3.json('projects-extended.json').then((res) => {
         },
         barmode: 'stack',
     };
+
     Plotly.newPlot('graphs', data_projects, layout_proj_type);
 
     let data = [];
-    let sub = 0;
-    let project_names = ['Tech', 'Non-tech', 'Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
-
-    project_names.map(category => {
-        var stacked = {
-            x: type_quarter,
-            y: [proj_type_quarter[0][sub], proj_type_quarter[1][sub], proj_type_quarter[2][sub],
-                proj_type_quarter[3][sub], proj_type_quarter[4][sub], proj_type_quarter[5][sub],
-                proj_type_quarter[6][sub], proj_type_quarter[7][sub], proj_type_quarter[8][sub],
-                proj_type_quarter[9][sub], proj_type_quarter[10][sub], proj_type_quarter[11][sub]],
-            type: 'bar',
-            name: category,
-        };
-        data.push(stacked);
-        sub++;
+    let project_names = ['Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
+    data = project_names.map((category, sub) => {
+        return {
+                x: type_quarter,
+                y: [proj_type_quarter[0][sub+2], proj_type_quarter[1][sub+2], proj_type_quarter[2][sub+2],
+                    proj_type_quarter[3][sub+2], proj_type_quarter[4][sub+2], proj_type_quarter[5][sub+2],
+                    proj_type_quarter[6][sub+2], proj_type_quarter[7][sub+2], proj_type_quarter[8][sub+2],
+                    proj_type_quarter[9][sub+2], proj_type_quarter[10][sub+2], proj_type_quarter[11][sub+2]],
+                type: 'bar',
+                name: category,
+        }
     });
 
     var layout_proj_quarters = {
