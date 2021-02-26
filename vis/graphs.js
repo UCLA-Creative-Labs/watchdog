@@ -85,7 +85,7 @@ d3.json('projects-extended.json').then((res) => {
             y: [0, proj_type_num[index+2]],
             type: 'bar',
             name: project_names_only[index],
-        } : 
+        } :
         proj = {
             x: ['Tech', 'Non-tech'],
             y: [proj_type_num[index+2], 0],
@@ -119,7 +119,7 @@ d3.json('projects-extended.json').then((res) => {
                     proj_type_quarter[9][sub+2], proj_type_quarter[10][sub+2], proj_type_quarter[11][sub+2]],
                 type: 'bar',
                 name: category,
-        }
+        };
     });
 
     var layout_proj_quarters = {
