@@ -76,22 +76,23 @@ d3.json('projects-extended.json').then((res) => {
     });
 
     let data_projects = [];
-    let proj = [];
     let project_names_only = ['Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
     data_projects = project_names_only.map((proj_type, index) => {
-        proj_type == 'Writing' || proj_type == 'Art' ?
-        proj = {
-            x: ['Tech', 'Non-tech'],
-            y: [0, proj_type_num[index+2]],
-            type: 'bar',
-            name: project_names_only[index],
-        } :
-        proj = {
-            x: ['Tech', 'Non-tech'],
-            y: [proj_type_num[index+2], 0],
-            type: 'bar',
-            name: project_names_only[index],
-        };
+        const proj = proj_type == 'Writing' || proj_type == 'Art'
+            ?
+                {
+                    x: ['Tech', 'Non-tech'],
+                    y: [0, proj_type_num[index+2]],
+                    type: 'bar',
+                    name: project_names_only[index],
+                }
+            :
+                {
+                    x: ['Tech', 'Non-tech'],
+                    y: [proj_type_num[index+2], 0],
+                    type: 'bar',
+                    name: project_names_only[index],
+                };
         return proj;
     });
 
@@ -109,8 +110,7 @@ d3.json('projects-extended.json').then((res) => {
     Plotly.newPlot('graphs', data_projects, layout_proj_type);
 
     let data = [];
-    let project_names = ['Writing', 'Art', 'App', 'Game', 'IoT', 'Web', 'AR', 'VR'];
-    data = project_names.map((category, sub) => {
+    data = project_names_only.map((category, sub) => {
         return {
                 x: type_quarter,
                 y: [proj_type_quarter[0][sub+2], proj_type_quarter[1][sub+2], proj_type_quarter[2][sub+2],
