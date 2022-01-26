@@ -1,32 +1,52 @@
 module.exports = {
   env: {
-    node: true,
-    browser: true,
     es2020: true,
   },
   extends: [
     'eslint:recommended',
+    'plugin:import/typescript',
+    'plugin:@typescript-eslint/recommended',
   ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: 'module',
+    project: './tsconfig.json',
+  },
   plugins: [
     'import',
-    'no-floating-promise',
-    'sort-class-members',
+    '@typescript-eslint',
   ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
   rules: {
     'linebreak-style': [ 'error', 'unix' ],
 
+    '@typescript-eslint/no-require-imports': [ 'error' ],
+
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
+
+    // Arugements can be typed as any
+    '@typescript-eslint/explicit-module-boundary-types': [
+      'warn',
+      { allowArgumentsExplicitlyTypedAsAny: true },
+    ],
+
+    // Remove default disallowal of any type
+    '@typescript-eslint/no-explicit-any': 'off',
+
+    // 2 space indentation
+    '@typescript-eslint/indent': [ 'error', 2 ],
+
     // Style
     'quotes': [ 'error', 'single', { avoidEscape: true } ],
-
-    'no-unused-vars': [
-      'error',
-      { argsIgnorePattern: '^_' },
-    ],
 
     // ensures clean diffs, see https://medium.com/@nikgraf/why-you-should-enforce-dangling-commas-for-multiline-statements-d034c98e36f8
     'comma-dangle': [ 'error', 'always-multiline' ],
@@ -46,14 +66,15 @@ module.exports = {
     // Require an ordering on all imports
     'import/order': ['warn', {
       groups: ['builtin', 'external'],
-      alphabetize: { order: 'asc' },
+      alphabetize: { order: 'asc', caseInsensitive: true },
     }],
 
     // Cannot import from the same module twice
     'no-duplicate-imports': ['error'],
 
     // Cannot shadow names
-    'no-shadow': ['error'],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
 
     // Required spacing in property declarations (copied from TSLint, defaults are good)
     'key-spacing': ['error'],
@@ -78,7 +99,7 @@ module.exports = {
     }],
 
     // One of the easiest mistakes to make
-    'no-floating-promise/no-floating-promise': 2,
+    '@typescript-eslint/no-floating-promises': ['error'],
 
     // Don't leave log statements littering the premises!
     'no-console': ['error'],
@@ -93,17 +114,23 @@ module.exports = {
     'no-bitwise': ['error'],
 
     // Member ordering
-    'sort-class-members/sort-class-members': [2, {
-      order: [
-        '[static-properties]',
-        '[static-methods]',
-        '[properties]',
-        '[conventional-private-properties]',
-        'constructor',
-        '[methods]',
-        '[conventional-private-methods]',
+    '@typescript-eslint/member-ordering': ['error', {
+      default: [
+        'public-static-field',
+        'public-static-method',
+        'protected-static-field',
+        'protected-static-method',
+        'private-static-field',
+        'private-static-method',
+
+        'field',
+
+        // Constructors
+        'constructor', // = ['public-constructor', 'protected-constructor', 'private-constructor']
+
+        // Methods
+        'method',
       ],
     }],
   },
-  root: true,
 };
