@@ -7,7 +7,7 @@
     "ci": "yarn install --frozen-lockfile",
     "build": "npx lerna run build",
     "lint": "npx lerna run lint",
-    "lint:fix": "npx lerna exec -- yarn lint --fix",
+    "lint:fix": "npx lerna exec -- yarn lint:fix",
     "test": "npx lerna run test",
     "postversion": "git push --atomic --follow-tags",
     "tag:changed": "npx lerna version",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/UCLA-Creative-Labs/watchdog#readme",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/web/*"
     ]
   },
   "devDependencies": {
