@@ -1,0 +1,15 @@
+[GLOBAL]
+pants_version = "2.9.0"
+backend_packages = [
+  "pants.backend.shell",
+  "pants.backend.python",
+  "pants.backend.python.lint.black",
+]
+
+[source]
+root_patterns = [
+  '/packages/snake'
+]
+
+[anonymous-telemetry]
+enabled = false
