@@ -1,0 +1,31 @@
+{
+  "name": "root",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "preci": "rm -rf node_modules",
+    "ci": "yarn install --frozen-lockfile",
+    "build": "npx lerna run build",
+    "lint": "npx lerna run lint",
+    "lint:fix": "npx lerna exec -- yarn lint --fix",
+    "test": "npx lerna run test",
+    "postversion": "git push --atomic --follow-tags",
+    "tag:changed": "npx lerna version",
+    "tag:all": "npx lerna version --force-publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UCLA-Creative-Labs/watchdog.git"
+  },
+  "author": "Bryan Pan",
+  "license": "MIT",
+  "homepage": "https://github.com/UCLA-Creative-Labs/watchdog#readme",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
