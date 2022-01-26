@@ -37,15 +37,15 @@ As such, whenever you commit code, we recommend you run `yarn lint` to ensure th
 
 ## Repository Architecture
 
-The respository architecture we utilize for `watchdog` makes all types of files first class citizens.
+The respository architecture we utilize for `watchdog website` makes all types of files first class citizens.
 Usually, in a `React` project, you would have a `src/` which branches into directories like
 `assets/`, `components/`, and `styles/`. One of the downsides to such a nested structure is 
 that files are easily lost and duplication happens more frequently.
 
-`watchdog` is organized with different files segmented into first class directories.
+`watchdog website` is organized with different files segmented into first class directories.
 
 ```
-root
+website
 ├── components/
 │   ├── Layout.tsx
 │   └── ...
