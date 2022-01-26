@@ -8,8 +8,14 @@ backend_packages = [
 
 [source]
 root_patterns = [
-  '/packages/snake'
+  "/packages/snake",
 ]
 
 [anonymous-telemetry]
 enabled = false
+
+[tailor]
+ignore_paths = [
+  "archive/**",
+  "scripts/**"
+]
