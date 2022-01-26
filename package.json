@@ -11,7 +11,8 @@
     "test": "npx lerna run test",
     "postversion": "git push --atomic --follow-tags",
     "tag:changed": "npx lerna version",
-    "tag:all": "npx lerna version --force-publish"
+    "tag:all": "npx lerna version --force-publish",
+    "no-lock": "./scripts/noPackageLock.sh"
   },
   "repository": {
     "type": "git",
