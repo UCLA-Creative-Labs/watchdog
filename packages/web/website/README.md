@@ -1,9 +1,12 @@
 # Watchdog - Website
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 [![Mergify Status][mergify-status]][mergify]
+[![Netlify Status][netlify-status]](netlify-link)
 
 [mergify]: https://mergify.io
 [mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/UCLA-Creative-Labs/watchdog&style=flat
+[netlify-status]: https://api.netlify.com/api/v1/badges/5eed4b40-dc5e-420b-9e77-56ea13188d9b/deploy-status
+[netlify-link]: https://app.netlify.com/sites/clwatchdog/deploys
 
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md). By participating, you are 
 expected to uphold this code. Please report unacceptable behavior to uclacreatives@gmail.com.
