@@ -21,7 +21,7 @@ export default NextAuth({
         return false;
       }
 
-      const data = await res.json();
+      const data: { roles: string[] } = await res.json();
       const isBoardMember = (data?.roles ?? []).find(role => role === '761437487838789643');
 
       return !!isBoardMember;
