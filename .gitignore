@@ -22,3 +22,7 @@ credentials.json
 /dist/
 /.pids
 /.pants.workdir.file_lock*
+
+# Never commit authentication or data
+*.json
+*.csv
