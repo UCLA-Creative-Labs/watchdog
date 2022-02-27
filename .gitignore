@@ -16,6 +16,8 @@ data/
 # Never commit environment variables
 .env
 credentials.json
+auth.json
+clauth.json
 
 # Pants workspace files
 /.pants.d/
