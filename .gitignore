@@ -16,6 +16,14 @@ data/
 # Never commit environment variables
 .env
 credentials.json
+auth.json
+clauth.json
+
+# Never commit application info
+*.csv
+
+# Never commit pycache
+__pycache__
 
 # Pants workspace files
 /.pants.d/
