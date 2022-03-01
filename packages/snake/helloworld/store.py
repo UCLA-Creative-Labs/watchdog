@@ -29,7 +29,7 @@ def format_plead_data(row, sheet, db, id):
       "open_spots": row[6],
       "id": id,
     }
-    key = row[3]+sheet.title
+    key = row[4]+'_'+sheet.title
     if not key:
       db.collection("plead-applications").document(key).set(data)
       return data
