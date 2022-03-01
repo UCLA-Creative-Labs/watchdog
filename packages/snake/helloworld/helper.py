@@ -13,16 +13,16 @@ def write_line_to_csv(file, entry):
         csv_writer.writerow(entry)
 
 def clear_csv(file):
-    fileVariable = open(file, 'r+')
-    fileVariable.truncate(0)
-    fileVariable.close()
+    edit = open(file, 'r+')
+    edit.truncate(0)
+    edit.close()
 
 def sort_csv(file, list):
-    inputfile = csv.reader(open(file,'r'))
+    f = csv.reader(open(file,'r'))
     input = []
-    for row in inputfile:
+    for row in f:
         input.append(row)
-    input.sort(key = lambda x: int(x[0]))
+    input.sort(key = lambda x: int(x[-1]))
     input.insert(0, list)
     clear_csv(file)
     write_to_csv(input, file)

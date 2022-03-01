@@ -10,9 +10,12 @@ def format_member_data(row, sheet, db, id):
       "first_choice": row[6],
       "second_choice": row[7],
       "third_choice": row[8],
+      "id": id,
     }
-    db.collection("member-applications").document(str(id)).set(data)
-    return data
+    key = row[3]+'_'+sheet.title
+    if not key:
+      db.collection("member-applications").document(key).set(data)
+      return data
  
 def format_plead_data(row, sheet, db, id):
     data = {
@@ -24,9 +27,12 @@ def format_plead_data(row, sheet, db, id):
       "lead_email": row[4],
       "lead_year": row[5],
       "open_spots": row[6],
+      "id": id,
     }
-    db.collection("plead-applications").document(str(id)).set(data)
-    return data
+    key = row[3]+sheet.title
+    if not key:
+      db.collection("plead-applications").document(key).set(data)
+      return data
 
 def store_data(list, db, format_func):
     id = 1
@@ -36,4 +42,3 @@ def store_data(list, db, format_func):
         for row in vals:
             format_func(row, sheet, db, id)
             id+=1
-            
